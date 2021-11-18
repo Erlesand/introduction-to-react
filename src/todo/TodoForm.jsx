@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const style = {
   width: "100%",
   backgroundColor: "#FFF",
@@ -8,10 +10,26 @@ const style = {
   border: "none",
 };
 
-const TodoForm = () => {
+const TodoForm = ({ createTodo }) => {
+  const [title, setTitle] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (title.trim()) {
+      createTodo(title.trim());
+      setTitle("");
+    }
+  };
+
   return (
-    <form>
-      <input style={style} placeholder="What do you need to do?" />
+    <form onSubmit={handleSubmit}>
+      <input
+        style={style}
+        placeholder="What do you need to do?"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+      />
     </form>
   );
 };

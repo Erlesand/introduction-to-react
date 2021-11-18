@@ -24,9 +24,9 @@ const Label = styled.label`
   background-repeat: no-repeat;
   padding: 15px 15px 15px 60px;
   display: inline-block;
-  background-image: url(${(props) => (props.completed ? checked : unchecked)})
+  background-image: url(${(props) => (props.completed ? checked : unchecked)});
   color: ${(props) => (props.completed ? "#d9d9d9" : "initial")};
-  text-decoration: ${(props) => (props.completed ? "#line-through" : "none")};
+  text-decoration: ${(props) => (props.completed ? "line-through" : "none")};
 `;
 
 const Button = styled.button`
@@ -42,14 +42,16 @@ const Button = styled.button`
   }
 `;
 
-const Todo = ({ id, title, completed }) => {
+const Todo = ({ id, title, completed, deleteTodo, updateTodo }) => {
   return (
     <Container>
       <div>
-        <Checkbox id={id} type="checkbox" />
-        <Label htmlFor={id}>Todo title goes here...</Label>
+        <Checkbox id={id} type="checkbox" onClick={() => updateTodo(id)} />
+        <Label htmlFor={id} completed={completed}>
+          {title}
+        </Label>
       </div>
-      <Button icon="x" />
+      <Button icon="x" onClick={() => deleteTodo(id)} />
     </Container>
   );
 };
