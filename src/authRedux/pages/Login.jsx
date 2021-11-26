@@ -1,14 +1,13 @@
-import {
-  Redirect,
+import { connect } from "react-redux";
+import { Redirect, useLocation } from "react-router-dom";
 
-  useLocation
-} from 'react-router-dom';
+import { authLoginSuccess, authLoginFailure } from "../actions";
 
 let Login = ({ user, loginError, authLoginSuccess, authLoginFailure }) => {
   const location = useLocation();
-  
+
   if (user) {
-    const redirectTo = location.state?.from ?? '/';
+    const redirectTo = location.state?.from ?? "/";
 
     return <Redirect to={redirectTo} />;
   }
@@ -16,13 +15,13 @@ let Login = ({ user, loginError, authLoginSuccess, authLoginFailure }) => {
   // ...
   // Helper method.
   const login = async (credential) => {
-    if (credential === 'admin') {
-      // TODO: Dispatch action authLoginSuccess.
+    if (credential === "admin") {
+      authLoginSuccess(credential);
     } else {
-      // TODO: Dispatch action authLoginFailure.
+      authLoginFailure();
     }
   };
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     login(e.target.login.value);
@@ -34,9 +33,20 @@ let Login = ({ user, loginError, authLoginSuccess, authLoginFailure }) => {
       <form onSubmit={handleSubmit}>
         <input id="login" />
       </form>
-      {loginError && 'Login was incorrect'}
+      {loginError && "Login was incorrect"}
     </>
-  )
-}
-    
-export { Login }
+  );
+};
+
+Login = connect(
+  ({ auth }) => ({
+    user: auth.user,
+    loginError: auth.loginError,
+  }),
+  {
+    authLoginSuccess,
+    authLoginFailure,
+  }
+)(Login);
+
+export { Login };
